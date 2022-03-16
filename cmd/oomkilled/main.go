@@ -22,22 +22,28 @@ type Oomkilled struct {
 }
 
 func (o Oomkilled) Process(k8sClient kubernetes.Interface, event *core.Event, controllerStartTime time.Time) {
-    pod, err := k8sClient.CoreV1().Pods(event.InvolvedObject.Namespace).Get(context.Background(), event.InvolvedObject.Name, metav1.GetOptions{})
+    pod, err := k8sClient.CoreV1().Pods(event.InvolvedObject.Namespace).Get(context.Background(),
+        event.InvolvedObject.Name, metav1.GetOptions{})
     if err != nil {
-        log.Info().Msgf("Failed to retrieve pod %s/%s, due to: %v", event.InvolvedObject.Namespace, event.InvolvedObject.Name, err)
+        log.Info().Msgf("Failed to retrieve pod %s/%s, due to: %v",
+            event.InvolvedObject.Namespace, event.InvolvedObject.Name, err)
     } else {
         for _, s := range pod.Status.ContainerStatuses {
-            if s.LastTerminationState.Terminated == nil || s.LastTerminationState.Terminated.Reason != TerminationReasonOOMKilled {
-                log.Info().Msgf("container %s in %s/%s was not oomkilled, event ignored", s.Name, pod.Namespace, pod.Name)
+            if s.LastTerminationState.Terminated == nil ||
+                s.LastTerminationState.Terminated.Reason != TerminationReasonOOMKilled {
+                log.Info().Msgf("container %s in %s/%s was not oomkilled, event ignored",
+                    s.Name, pod.Namespace, pod.Name)
                 continue
             }
 
             if s.LastTerminationState.Terminated.FinishedAt.Time.Before(controllerStartTime) {
-                log.Info().Msgf("container '%s' in '%s/%s' was terminated before this controller started", s.Name, pod.Namespace, pod.Name)
+                log.Info().Msgf("container '%s' in '%s/%s' was terminated before this controller started",
+                    s.Name, pod.Namespace, pod.Name)
                 continue
             }
 
-            msg := fmt.Sprintf("%s Container '%s' in '%s/%s' (%s) was OOMKilled", o.AdditionnalText, s.Name, pod.Namespace, pod.Name, s.ContainerID)
+            msg := fmt.Sprintf("%s Container '%s' in '%s/%s' (%s) was OOMKilled",
+                o.AdditionnalText, s.Name, pod.Namespace, pod.Name, s.ContainerID)
             log.Info().Msg(msg)
             o.sendSlackMessage(msg)
         }

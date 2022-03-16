@@ -45,7 +45,6 @@ func isSameEventOccurrence(g *eventUpdateGroup) bool {
 }
 
 func Run(k8sClient kubernetes.Interface, eventProcessors []eventprocessor.EventProcessor) *Controller {
-
     k8sFactory := informers.NewSharedInformerFactory(k8sClient, informerSyncMinute * time.Minute)
     stopChan := make(chan struct{})
 
@@ -77,7 +76,6 @@ func Run(k8sClient kubernetes.Interface, eventProcessors []eventprocessor.EventP
 }
 
 func (c *Controller) HandleEvents() error {
-
     c.k8sFactory.Start(c.stopChan)
 
     stop := make(chan struct{})
@@ -119,7 +117,8 @@ func (c *Controller) evaluateEventUpdate(eventUpdate  *eventUpdateGroup) {
                 event.ObjectMeta.Namespace, event.ObjectMeta.Name, event.Count, event.Reason, event.InvolvedObject.Kind)
         case isSameEventOccurrence(eventUpdate):
             log.Debug().Msgf("Event %s/%s (count: %d), reason: %s, involved object: %s, did not change wrt. to restart count: skipping processing",
-                eventUpdate.newEvent.ObjectMeta.Namespace, eventUpdate.newEvent.ObjectMeta.Name, eventUpdate.newEvent.Count, eventUpdate.newEvent.Reason, eventUpdate.newEvent.InvolvedObject.Kind)
+                eventUpdate.newEvent.ObjectMeta.Namespace, eventUpdate.newEvent.ObjectMeta.Name, eventUpdate.newEvent.Count,
+                    eventUpdate.newEvent.Reason, eventUpdate.newEvent.InvolvedObject.Kind)
         default:
             c.evaluatePodStatus(event)
     }
