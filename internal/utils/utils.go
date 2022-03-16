@@ -18,14 +18,30 @@ func InstallSignalHandler(stop chan struct{}) {
     }()
 }
 
+type Config struct {
+    Debug bool
+    Oomkilled bool
+}
+
 func InitLog() {
     zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
-    debug := flag.Bool("debug", false, "sets log level to debug")
-
-    flag.Parse()
     zerolog.SetGlobalLevel(zerolog.InfoLevel)
+}
+
+func GetFlag() *Config {
+    debug := flag.Bool("debug", false, "sets log level to debug")
+    oomkilled := flag.Bool("oom", false, "sets events handler oomkilled")
+    flag.Parse()
+
+    config := &Config{Oomkilled: false, Debug: false}
 
     if *debug {
+        config.Debug = true
         zerolog.SetGlobalLevel(zerolog.DebugLevel)
     }
+
+    if *oomkilled {
+        config.Oomkilled = true
+    }
+    return config
 }

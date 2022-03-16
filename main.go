@@ -11,12 +11,19 @@ import (
 )
 
 func main() {
-
     utils.InitLog()
+    config := utils.GetFlag()
 
-    webhookURL, ok := os.LookupEnv("WEBHOOKURL")
-    if !ok {
-        log.Fatal().Msgf("%s not set\n", "WEBHOOKURL")
+    contextInfo, _ := os.LookupEnv("CONTEXTINFO")
+    eventPocessors := []eventprocessor.EventProcessor{}
+
+    if config.Oomkilled {
+        webhookURL, ok := os.LookupEnv("WEBHOOKURL")
+        if !ok {
+            log.Fatal().Msgf("%s not set\n", "WEBHOOKURL")
+        }
+        oomkilled := &oomkilled.Oomkilled{Name: "oomkill", WebhookUrl: webhookURL, AdditionnalText: contextInfo}
+        eventPocessors = append(eventPocessors, oomkilled)
     }
 
     k8sClient, err := kubeclient.CreateClient()
@@ -25,9 +32,7 @@ func main() {
     }
 
     log.Info().Msg("Starting kubernetes watcher...")
-    contextInfo := "Cluster : sandbox, env : eu\n"
-    oomkilled := &oomkilled.Oomkilled{Name: "oomkill", WebhookUrl: webhookURL, AdditionnalText: contextInfo}
-    controller := watchevents.Run(k8sClient, []eventprocessor.EventProcessor{oomkilled})
+    controller := watchevents.Run(k8sClient, eventPocessors)
 
     log.Info().Msg("Starting event handler...")
     controller.HandleEvents()
