@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  kubernetes-events-notifier:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2022-03-17T01:10:06.484752159Z"
+    description: A Helm chart for Kubernetes
+    digest: 65e056be42dfeb2836c0bc2d1d6d169aff391cba3d968fa7c9e031a6405a30e7
+    name: kubernetes-events-notifier
+    type: application
+    urls:
+    - https://github.com/damienjacinto/kubernetes-events-notifier/releases/download/kubernetes-events-notifier-0.2.1/kubernetes-events-notifier-0.2.1.tgz
+    version: 0.2.1
+generated: "2022-03-17T01:10:06.384179983Z"
