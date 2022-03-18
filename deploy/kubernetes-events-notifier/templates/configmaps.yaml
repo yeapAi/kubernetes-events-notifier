@@ -1,0 +1,7 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ include "kubernetes-events-notifier.fullname" . }}
+data:
+  CONTEXTINFO: "{{ default "" .Values.config.contextinfo }}"
+  WEBHOOKURL: "{{ default "" .Values.config.webhookurl }}"
