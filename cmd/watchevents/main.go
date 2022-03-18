@@ -76,12 +76,16 @@ func Run(k8sClient kubernetes.Interface, eventProcessors []eventprocessor.EventP
 }
 
 func (c *Controller) HandleEvents() error {
+    log.Info().Msg("test")
     c.k8sFactory.Start(c.stopChan)
+    log.Info().Msg("test2")
 
     stop := make(chan struct{})
+    log.Info().Msg("test3")
     utils.InstallSignalHandler(stop)
+    log.Info().Msg("test4")
     c.k8sFactory.WaitForCacheSync(stop)
-
+    log.Info().Msg("test5")
     for {
         select {
             case event := <-c.eventAddedCh:

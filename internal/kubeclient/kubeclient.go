@@ -22,10 +22,10 @@ func loadKubeconfigPath(kubeconfigPath string) {
     kubeconfig.LoadKubeconfig(kubeconfigPath)
 }
 
-func CreateClient() (kubernetes.Interface, error) {
+func CreateClient(forceNotInCluster bool) (kubernetes.Interface, error) {
     var kubeconfig *rest.Config
 
-    kubeconfigPath := getKubeconfigPath(false)
+    kubeconfigPath := getKubeconfigPath(forceNotInCluster)
 
     if kubeconfigPath != "" {
         config, err := clientcmd.BuildConfigFromFlags("", kubeconfigPath)

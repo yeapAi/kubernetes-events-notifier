@@ -21,6 +21,7 @@ func InstallSignalHandler(stop chan struct{}) {
 type Config struct {
     Debug bool
     Oomkilled bool
+    NotInCluster bool
 }
 
 func InitLog() {
@@ -31,17 +32,11 @@ func InitLog() {
 func GetFlag() *Config {
     debug := flag.Bool("debug", false, "sets log level to debug")
     oomkilled := flag.Bool("oom", false, "sets events handler oomkilled")
+    notincluster := flag.Bool("notincluster", false, "force running not in cluster for kubeconfig location")
     flag.Parse()
 
-    config := &Config{Oomkilled: false, Debug: false}
-
     if *debug {
-        config.Debug = true
         zerolog.SetGlobalLevel(zerolog.DebugLevel)
     }
-
-    if *oomkilled {
-        config.Oomkilled = true
-    }
-    return config
+    return &Config{Oomkilled: *oomkilled, Debug: *debug, NotInCluster: *notincluster}
 }

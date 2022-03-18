@@ -26,7 +26,7 @@ func main() {
         eventPocessors = append(eventPocessors, oomkilled)
     }
 
-    k8sClient, err := kubeclient.CreateClient()
+    k8sClient, err := kubeclient.CreateClient(config.NotInCluster)
     if err != nil {
         log.Fatal().Err(err)
     }

@@ -55,9 +55,5 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Create the name of the service account to use
 */}}
 {{- define "kubernetes-events-notifier.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
 {{- default (include "kubernetes-events-notifier.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
 {{- end }}
