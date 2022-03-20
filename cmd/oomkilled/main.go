@@ -31,8 +31,8 @@ func (o Oomkilled) Process(k8sClient kubernetes.Interface, event *core.Event, co
         for _, s := range pod.Status.ContainerStatuses {
             if s.LastTerminationState.Terminated == nil ||
                 s.LastTerminationState.Terminated.Reason != TerminationReasonOOMKilled {
-                log.Info().Msgf("container %s in %s/%s was not oomkilled, event ignored",
-                    s.Name, pod.Namespace, pod.Name)
+                log.Info().Msgf("container %s in %s/%s was not oomkilled, event ignored (Last Terminate State: %s)",
+                    s.Name, pod.Namespace, pod.Name, s.LastTerminationStat.Terminated)
                 continue
             }
 
