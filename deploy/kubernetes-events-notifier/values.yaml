@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: ghcr.io/damienjacinto/kubernetes-events-notifier
+  repository: ghcr.io/yeapai/kubernetes-events-notifier
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
