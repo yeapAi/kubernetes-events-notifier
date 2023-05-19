@@ -3,6 +3,16 @@ entries:
   kubernetes-events-notifier:
   - apiVersion: v2
     appVersion: 0.0.3
+    created: "2023-05-19T15:08:46.271633607Z"
+    description: A Helm chart for Kubernetes
+    digest: 0571ada1d53133778b59282019f26d7df4c375fe99b33a2b578eb9505a6192f8
+    name: kubernetes-events-notifier
+    type: application
+    urls:
+    - https://github.com/yeapAi/kubernetes-events-notifier/releases/download/kubernetes-events-notifier-0.2.2/kubernetes-events-notifier-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
+    appVersion: 0.0.3
     created: "2022-07-04T07:36:37.679179356Z"
     description: A Helm chart for Kubernetes
     digest: abb940c4710dca70f397bd8852c1c8fc318c0c04425cc1ca403b25c8a2248b2a
